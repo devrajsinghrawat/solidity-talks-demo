@@ -1,14 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
+/*
+    Which function is called, fallback() or receive()?
 
-// Send ETH
-/**
-* calldata (msg.data) is empty --> receive exist --> call recieve()
-* calldata (msg.data) is not empty --> call fallback
-*
-*
-*/
+           send Ether
+               |
+         msg.data is empty?
+              / \
+            yes  no
+            /     \
+receive() exists?  fallback()
+         /   \
+        yes   no
+        /      \
+    receive()   fallback()
+
+**/
+
 contract Fallback {
     event Log(uint gas);
     event ReceiveLogged(uint value, uint gasLeft);
