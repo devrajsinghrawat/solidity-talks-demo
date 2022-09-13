@@ -19,7 +19,6 @@ contract Base {
        (bool success, ) = _d.delegatecall(abi.encodeWithSignature('setVars(uint256)', _num));
        require(success, 'Delegate call failed');
     }
-
 }
 
 contract Delegate {
