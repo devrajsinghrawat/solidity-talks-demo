@@ -1,6 +1,14 @@
 # solidity-by-example
 solidity concepts demo 
  - Basics
+   - Storage type
+   - Iterable mapping
+   - Inheritance
+   - Emergency control (Pause, unpause)
+   - Ownable - WIP
+   - Receive ETh
+   - Receive Eth Detailed
+   - Function Selector
 
  - Vault 
     - Ether wallet
