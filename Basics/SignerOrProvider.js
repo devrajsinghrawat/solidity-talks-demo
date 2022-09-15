@@ -28,7 +28,7 @@ const contractAddress = "0x764a06fDdcE6b8895b6E7F9ba2874711BF31edEa";
 // - Populating Unsigned Transactions for non-constant methods 
 // - Estimating Gas for non-constant (as an anonymous sender) 
 // - Static Calling non-constant methods (as anonymous sender) 
-const erc20 = new ethers.Contract(contractAddress, abi, provider); 
+const erc20_r = new ethers.Contract(contractAddress, abi, provider); 
 
 // Read-Write; By connecting to a Signer, allows: 
 // - Everything from Read-Only (except as Signer, not anonymous) 
