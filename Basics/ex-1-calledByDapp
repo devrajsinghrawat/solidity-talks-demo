@@ -36,7 +36,7 @@ import ABI from "./abi.json";
     //  const contract = new ethers.Contract(contractAddr, ABI, signer); 
     
     // Ex -1 : This is a direct way of calling the smart contract method
-    //  const tx = await contract.deposit({value: ethers.utils.parseEther('0.02')}); 
+    //  const tx = await contract.CallMe("Hello World"); 
     //  const result = (await tx).wait();
     //  console.log(result); 
     
