@@ -1,0 +1,55 @@
+// Smart Contract
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract CalledByDapp {
+    string  message;
+
+
+    function CallMe(string calldata _msg ) external {
+        message = _msg;
+    }
+}
+
+
+// dApp side logic 
+
+import { ethers } from "ethers";
+import ABI from "./abi.json";
+
+  async function callMethod() {
+    const contractAddr = '<deployed contract address>';
+
+    // Get provider 
+    // A Web3Provider wraps a standard Web3 provider, which is what MetaMask injects as window.ethereum into each page 
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    
+    // MetaMask requires requesting permission to connect users accounts 
+    await provider.send("eth_requestAccounts", []);
+    
+    // The MetaMask plugin also allows signing transactions to send ether and pay to change state within the blockchain. For this, \
+    // you need the account signer... 
+    const signer = provider.getSigner();
+    
+    // Get contract instance 
+    //  const contract = new ethers.Contract(contractAddr, ABI, signer); 
+    
+    // Ex -1 : This is a direct way of calling the smart contract method
+    //  const tx = await contract.deposit({value: ethers.utils.parseEther('0.02')}); 
+    //  const result = (await tx).wait();
+    //  console.log(result); 
+    
+
+    // Ex -2: This is a Low level way of calling the smart contract method
+    // Get Interface 
+    const iface = new ethers.utils.Interface(ABI);
+    
+    // Get Function data 
+    const data = iface.encodeFunctionData("CallMe", ["Hello World"]);
+    
+    // Call the CallMe method in the contract
+    const tx = signer.sendTransaction({ to: contractAddr, data });
+    const result = (await tx).wait();
+    console.log(result); 
+  }
