@@ -198,7 +198,7 @@ export default function Home() {
       </Head>
       <div className={styles.main}>
         <div>
-          <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
+          <h1 className={styles.title}>Welcome to NFTDrop Whitelist!</h1>
           <div className={styles.description}>
             Its an NFT collection for developers in Crypto.
           </div>
@@ -207,14 +207,7 @@ export default function Home() {
           </div>
           {renderButton()}
         </div>
-        <div>
-          <img className={styles.image} src="./crypto-devs.svg" />
-        </div>
       </div>
-
-      {/* <footer className={styles.footer}>
-        Made with &#10084; by Crypto Devs
-      </footer> */}
     </div>
   );
 }
