@@ -63,5 +63,10 @@ export const abi = [
     type: "function",
   },
 ];
-export const WHITELIST_CONTRACT_ADDRESS =
-  "0x98f5c62F7b5Bc735a64942dBec9456954c7a368A";
+
+// export const WHITELIST_CONTRACT_ADDRESS =
+//   "0x0645547565a219b564578cFFD355e53Acb9cD18B";  // Goerli
+
+  export const WHITELIST_CONTRACT_ADDRESS =
+  "0xaaAec8799090B1b5324AF0e3484af841eaf7e660";  // Mumbai
+
