@@ -1,5 +1,7 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { GovernanceToken } from "./../typechain-types/contracts/GovernanceToken";
+import { ethers } from "hardhat";
 
 const deployGovernanceToken: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { getNamedAccounts, deployments, network } = hre;
@@ -16,21 +18,15 @@ const deployGovernanceToken: DeployFunction = async (hre: HardhatRuntimeEnvironm
   );
 
   log(`GT Contract with deployed to ${governanceToken.address}`);
-
-  // const GovernanceTokenFactory = await ethers.getContractFactory("GovernanceToken");
-  // const GT = await GovernanceTokenFactory.deploy();
-
-  // await GT.deployed();
-
-  // console.log(`GT Contract with deployed to ${GT.address}`);
+  await delegate(governanceToken.address, deployer);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-// main().catch((error) => {
-//   console.error(error);
-//   process.exitCode = 1;
-// });
-
 export default deployGovernanceToken;
-deployGovernanceToken.tags = ["all", "governanceToken"]
+deployGovernanceToken.tags = ["all", "governanceToken"];
+
+const delegate =  async (governanceTokenAddress: string, delegatedAccount: string) => {
+  const gT: GovernanceToken = await ethers.getContractAt("GovernanceToken", governanceTokenAddress);
+  const txResponse = await gT.delegate(delegatedAccount);
+  await txResponse.wait(1);
+  console.log(`Checkpoints: ${(await gT.numCheckpoints(delegatedAccount))}`);
+}
