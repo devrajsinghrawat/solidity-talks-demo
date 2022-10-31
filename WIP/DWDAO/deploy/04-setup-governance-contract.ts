@@ -1,44 +1,40 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { ethers } from "hardhat";
+import * as gtABI from "./../artifacts/contracts/GovernanceToken.sol/GovernanceToken.json";
+import * as tlABI from "./../artifacts/contracts/Governance/TimeLock.sol/TimeLock.json";
+import * as vgABI from "./../artifacts/contracts/Governance/VaultGovernor.sol/VaultGovernor.json";
 
 const setupGovernanceContract: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { getNamedAccounts, deployments, network } = hre;
   const { deployer } = await getNamedAccounts();
   const {deploy, log, get} = deployments;
 
-  const governanceToken = await ethers.getContractFactory("GovernanceToken", deployer);
-  const timeLock = await ethers.getContractFactory("TimeLock", deployer);
+  const governanceToken = await get("GovernanceToken");
+  const timeLock = await get("TimeLock");
   const vaultGovernor = await get("VaultGovernor");
 
+  console.log('gtABI.abi ..', gtABI.abi);
+  console.log('tlABI.abi ..', tlABI.abi);
 
-  log("Setting up governance roles.....");
+  const governanceTokenContract = await ethers.getContractAt(gtABI.abi, governanceToken.address);
+  const timeLockContract = await ethers.getContractAt(tlABI.abi, timeLock.address);
+  const vaultGovernorContract = await ethers.getContractAt(vgABI.abi, vaultGovernor.address);
 
-  await timeLock
 
-  const setupGovernanceContract = await deploy("GovernanceToken", {
-    from: deployer,
-    args:[],
-    log: true
-    }
-  );
+  log("Setting up governance roles...");
+
+  const proposerRole = await timeLockContract.DEFAULT_ADMIN_ROLE
+
+  // const setupGovernanceContract = await deploy("GovernanceToken", {
+  //   from: deployer,
+  //   args:[],
+  //   log: true
+  //   }
+  // );
 
   log(`GT Contract with deployed to ${governanceToken.address}`);
-
-  // const GovernanceTokenFactory = await ethers.getContractFactory("GovernanceToken");
-  // const GT = await GovernanceTokenFactory.deploy();
-
-  // await GT.deployed();
-
-  // console.log(`GT Contract with deployed to ${GT.address}`);
 }
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-// main().catch((error) => {
-//   console.error(error);
-//   process.exitCode = 1;
-// });
 
 export default setupGovernanceContract;
 setupGovernanceContract.tags = ["all", "governanceToken"]
