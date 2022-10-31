@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import  * as args from "./../hardhat-helper-config";
 
 const deployVaultGovernor: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { getNamedAccounts, deployments, network } = hre;
@@ -13,7 +14,13 @@ const deployVaultGovernor: DeployFunction = async (hre: HardhatRuntimeEnvironmen
 
   const vaultGovernor = await deploy("VaultGovernor", {
     from: deployer,
-    args:[],
+    args:[
+        governanceToken.address,
+        timeLock.address,
+        args.VOTING_DELAY,
+        args.VOTING_PERIOD,
+        args.QUORUM_PERCENT
+        ],
     log: true
     }
   );
