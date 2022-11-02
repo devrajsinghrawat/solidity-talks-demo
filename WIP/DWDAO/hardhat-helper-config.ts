@@ -13,4 +13,7 @@ export const FUNC = "store";
 export const FUNC_ARGS = 100;
 export const DESCRIPTION = "Update value to 100";
 
+export const DEVELOPMENT_CHAINS = ["hardhat", "localhost"];
+export const PROPOSAL_FILE = "proposals.json"
+
 
