@@ -9,3 +9,8 @@ export const EXECUTORS : string[] = [];
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"
 
+export const FUNC = "store";
+export const FUNC_ARGS = 100;
+export const DESCRIPTION = "Update value to 100";
+
+
