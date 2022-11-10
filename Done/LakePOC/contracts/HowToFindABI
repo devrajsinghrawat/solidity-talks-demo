@@ -1,0 +1,33 @@
+
+Launch the JS console on truffle, this will help you to interect with deployed contract (over Ganache or Testnet), for that you
+need to proivde the --network id accordingly 
+
+> truffle console --network development
+
+web3 will be default enable on this console, try to check out some commands like web3.eth.accounts 
+> web3.eth.accounts 
+
+get the instance of the deployed contract using below command
+> <Contract Name>.deployed().then(inst => { instance = inst })
+
+You can now interact with your deployed contract, I had tried to execute few getter 
+> instance.name.call()   // this should return the Name of the contract 
+> instance.totalSupply.call() 
+
+Get the addresss of the contract 
+> instance.addresss
+
+Now the Imp part to get ABI of the contract 
+> JSON.stringify(instance.abi)
+
+Ref Link https://hackernoon.com/ethereum-development-walkthrough-part-2-truffle-ganache-geth-and-mist-8d6320e12269
+
+But what if we want to interect with someone else token which is deployed and we know the addresss
+
+get the web3 instance, if using node else just get the abi and addresss and get the instance like 
+
+var Web3 = require('web3')
+var web3 = new Web3(provider)
+instance = new web3.eth.Contract(abi, Contractaddresss)
+
+instance.methods.symbol().call((err, res) => {console.log(res)})
