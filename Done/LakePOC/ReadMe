@@ -1,0 +1,45 @@
+Installed 
+
+NOdejs, YeoMan , Gulp and Bower 
+https://blog.teamtreehouse.com/improving-development-workflow-yeoman
+https://blog.teamtreehouse.com/getting-started-with-grunt
+http://yeoman.io/learning/
+
+http://www.dappuniversity.com/articles/web3-js-intro
+
+Not using Grunt as of now .. will explore later 
+
+> npm install -g yo@latest
+
+Install a webapp generator from a various options available I have used webapp generator
+
+> npm install -g generator-webapp
+
+Generate the project skeleton using 
+> yo webapp
+
+Bower is used to install further dependencies like Web3 
+> bower install web3
+
+to run local server use
+> gulp serve
+
+> For the sample application use the geth node running to with JSON RPC options "web3, eth, net, personal"
+> we can use TestRPC (Ganache) but account Locking and Unlocking might not support 
+> MetaMask also does not support all API's do have a check 
+
+
+
+To Connect using Infura 
+https://ropsten.infura.io/v3/cf3d4241a0494f7a9bb9eb4cfeed0c72
+
+API Key : cf3d4241a0494f7a9bb9eb4cfeed0c72
+API Secret : a59981408c2944708767622be23b668f
+
+
+
+Access Smart Connect using web3
+
+var Web3 = require(web3)
+var web3 = Web3.new(provider .i.e https://ropsten.infura.io/v3/cf3d4241a0494f7a9bb9eb4cfeed0c72 or http://localhost:8545)
+
