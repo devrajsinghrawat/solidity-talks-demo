@@ -42,13 +42,18 @@ describe("Testing Call function of solidity", function () {
     });
 
     it("Should update the state using Call", async function () {
-      const { toBeCalled, callee, owner } = await loadFixture(deployContractsFixture);
-      callee.callAndUpdateContractState(toBeCalled.address);
+      const ONE_GWEI = 1_000_000_000;
+      const { toBeCalled, callee } = await loadFixture(deployContractsFixture);
+      callee.callAndUpdateContractState(toBeCalled.address, {value : ONE_GWEI});
       expect(await toBeCalled.greeting()).to.equal("Hello World");
       expect(await toBeCalled.counter()).to.equal(11);
+
+      expect(await ethers.provider.getBalance(toBeCalled.address)).to.equal(
+        ONE_GWEI
+      );
     }); 
   });
-  
+
  /*
   describe("Withdrawals", function () {
     describe("Validations", function () {
