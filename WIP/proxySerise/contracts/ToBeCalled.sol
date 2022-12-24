@@ -3,24 +3,22 @@ pragma solidity ^0.8.9;
 
 // Uncomment this line to use console.log
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ToBeCalled {
-  uint public myInt;
-  string public myStr;
+contract ToBeCalled is Ownable {
+  uint public counter;
+  string public greeting;
 
   constructor() {
-    myInt = 1;
-    myStr = "One";
+    counter = 1;
+    greeting = "One";
   }
 
   function updateState(string memory _s, uint _n) external {
-      console.log("inside updateState", msg.sender, _n, tx.origin);
-      myInt += _n;
-      myStr = _s;
+      console.log("inside updateState - Function called by ", msg.sender);
+      console.log("inside updateState - Tx Originated by ", tx.origin);
+      console.log("inside updateState - Values passed ", _s, _n);
+      counter += _n;
+      greeting = _s;
   }
-
-  function getState() external view returns (uint) {
-    return myInt;
-  }
-
 }   

@@ -5,59 +5,51 @@ const {
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { expect } = require("chai");
 
-describe("Lock", function () {
+describe("Testing Call function of solidity", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
-  async function deployOneYearLockFixture() {
-    const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-    const ONE_GWEI = 1_000_000_000;
-
-    const lockedAmount = ONE_GWEI;
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
-
+  async function deployContractsFixture() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
 
-    const Lock = await ethers.getContractFactory("Lock");
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+    const ToBeCalledFactory = await ethers.getContractFactory("ToBeCalled");
+    const toBeCalled = await ToBeCalledFactory.deploy();
+    await toBeCalled.deployed();
+    console.log(`Contract ToBeCalled deployed to ${toBeCalled.address}`);
+  
+    const CalleeFactory = await ethers.getContractFactory("Callee");
+    const callee = await CalleeFactory.deploy();
+    await callee.deployed();
+    console.log(`Contract Callee deployed to ${callee.address}`);
 
-    return { lock, unlockTime, lockedAmount, owner, otherAccount };
+    return { toBeCalled, callee, owner, otherAccount };
   }
 
   describe("Deployment", function () {
-    it("Should set the right unlockTime", async function () {
-      const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
+    it("Should set the initial state for Counter and Greeting", async function () {
+      const { toBeCalled } = await loadFixture(deployContractsFixture);
 
-      expect(await lock.unlockTime()).to.equal(unlockTime);
+      expect(await toBeCalled.greeting()).to.equal("One");
+      expect(await toBeCalled.counter()).to.equal(1);
     });
-
+   
     it("Should set the right owner", async function () {
-      const { lock, owner } = await loadFixture(deployOneYearLockFixture);
+      const { toBeCalled, callee, owner } = await loadFixture(deployContractsFixture);
 
-      expect(await lock.owner()).to.equal(owner.address);
+      expect(await toBeCalled.owner()).to.equal(owner.address);
+      expect(await callee.owner()).to.equal(owner.address);
     });
 
-    it("Should receive and store the funds to lock", async function () {
-      const { lock, lockedAmount } = await loadFixture(
-        deployOneYearLockFixture
-      );
-
-      expect(await ethers.provider.getBalance(lock.address)).to.equal(
-        lockedAmount
-      );
-    });
-
-    it("Should fail if the unlockTime is not in the future", async function () {
-      // We don't use the fixture here because we want a different deployment
-      const latestTime = await time.latest();
-      const Lock = await ethers.getContractFactory("Lock");
-      await expect(Lock.deploy(latestTime, { value: 1 })).to.be.revertedWith(
-        "Unlock time should be in the future"
-      );
-    });
+    it("Should update the state using Call", async function () {
+      const { toBeCalled, callee, owner } = await loadFixture(deployContractsFixture);
+      callee.callAndUpdateContractState(toBeCalled.address);
+      expect(await toBeCalled.greeting()).to.equal("Hello World");
+      expect(await toBeCalled.counter()).to.equal(11);
+    }); 
   });
-
+  
+ /*
   describe("Withdrawals", function () {
     describe("Validations", function () {
       it("Should revert with the right error if called too soon", async function () {
@@ -121,6 +113,6 @@ describe("Lock", function () {
           [lockedAmount, -lockedAmount]
         );
       });
-    });
-  });
+    }); 
+  }); */
 });

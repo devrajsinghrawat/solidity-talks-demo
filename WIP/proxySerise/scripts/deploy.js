@@ -11,7 +11,7 @@ async function main() {
   const CalleeFactory = await ethers.getContractFactory("Callee");
   const callee = await CalleeFactory.deploy();
   await callee.deployed();
-  console.log(`Contract Call deployed to ${callee.address}`);
+  console.log(`Contract Callee deployed to ${callee.address}`);
 
   console.log("Contract ToBeCalled State before call");
 
