@@ -1,26 +1,45 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
-const hre = require("hardhat");
+
+
+const { ethers, upgrades } = require("hardhat");
+const provider = ethers.provider;
 
 async function main() {
   const currentTimestampInSeconds = Math.round(Date.now() / 1000);
   const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
   const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  const lockedAmount = ethers.utils.parseEther("1");
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  console.log("locked amount", lockedAmount);
 
-  await lock.deployed();
+  const Lock = await ethers.getContractFactory("Lock");
+
+  const impl = await upgrades.deployImplementation(Lock, {value: lockedAmount });
+  console.log("Impl contract deployed at", impl.address);
+  
+  const beacon = await upgrades.deployBeacon(Lock);
+  await beacon.deployed();
+
+  console.log("beacon contract deployed at", beacon.address)
+
+
+  console.log("implementation deployed to:", await upgrades.beacon.getImplementationAddress(beacon.address));  
+
+  const instance = await upgrades.deployBeaconProxy(beacon, Lock, [unlockTime],{ value: lockedAmount }); // beaconProxy
+  // console.log("instance ---> ", instance.deployTransaction);
+
+  await instance.deployed();
 
   console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    `instance with 1 ETH and unlock timestamp ${unlockTime} deployed to ${instance.address}`
   );
+
+  console.log('unlock time', await instance.unlockTime());
+  // console.log('unlock time', await instance.getUnlockTime());
+  console.log('owner of the contratc', await instance.owner());
+
+
+  console.log('balance of the contract -->', await provider.getBalance(instance.address));
 }
 
 // We recommend this pattern to be able to use async/await everywhere

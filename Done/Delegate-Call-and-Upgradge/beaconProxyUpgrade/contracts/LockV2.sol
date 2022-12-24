@@ -5,9 +5,10 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract Lock is Initializable {
+contract LockV2 is Initializable {
     uint public unlockTime;
     address payable public owner;
+    uint public balance;
 
     event Withdrawal(uint amount, uint when);
 
@@ -24,6 +25,7 @@ contract Lock is Initializable {
 
         unlockTime = _unlockTime;
         owner = payable(msg.sender);
+        // balance += msg.value;
     }
 
     function withdraw() public {
@@ -37,4 +39,10 @@ contract Lock is Initializable {
 
         owner.transfer(address(this).balance);
     }
+
+    // function upgradeTo(address newImplementation) public {
+    // // Upgrade the implementation contract to the new version.
+    // }
+
+    fallback() external{}
 }
