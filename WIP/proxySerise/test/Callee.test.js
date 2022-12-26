@@ -46,25 +46,39 @@ describe("Testing Call function of solidity", function () {
       const { toBeCalled, callee } = await loadFixture(deployContractsFixture);
       callee.callAndUpdateContractState(toBeCalled.address, {value : ONE_GWEI});
       expect(await toBeCalled.greeting()).to.equal("Hello World");
-      expect(await toBeCalled.counter()).to.equal(11);
+      expect(await toBeCalled.counter()).to.equal(10);
 
       expect(await ethers.provider.getBalance(toBeCalled.address)).to.equal(
         ONE_GWEI
       );
-    }); 
+    });     
   });
 
- /*
-  describe("Withdrawals", function () {
-    describe("Validations", function () {
-      it("Should revert with the right error if called too soon", async function () {
-        const { lock } = await loadFixture(deployOneYearLockFixture);
+  describe("delegate Call", function () {
+    it("Should update the state of callee contract", async function () { 
+      const ONE_GWEI = 1_000_000_000;
+      const { toBeCalled, callee } = await loadFixture(deployContractsFixture);
+      callee.delegateCallAndUpdateContractState(toBeCalled.address, {value : ONE_GWEI});
+      expect(await callee.greeting()).to.equal("Hello World");
+      expect(await callee.counter()).to.equal(10);
 
-        await expect(lock.withdraw()).to.be.revertedWith(
-          "You can't withdraw yet"
-        );
-      });
+      expect(await ethers.provider.getBalance(callee.address)).to.equal(
+        ONE_GWEI
+      );
+    }); 
 
+    it("Should not update the state of toBeCalled contract", async function () { 
+      const ONE_GWEI = 1_000_000_000;
+      const { toBeCalled, callee } = await loadFixture(deployContractsFixture);
+      callee.delegateCallAndUpdateContractState(toBeCalled.address, {value : ONE_GWEI});
+      expect(await toBeCalled.greeting()).to.equal("One");
+      expect(await toBeCalled.counter()).to.equal(1);
+
+      expect(await ethers.provider.getBalance(toBeCalled.address)).to.equal(
+        0
+      );
+    });
+      /*
       it("Should revert with the right error if called from another account", async function () {
         const { lock, unlockTime, otherAccount } = await loadFixture(
           deployOneYearLockFixture
@@ -88,9 +102,9 @@ describe("Testing Call function of solidity", function () {
         await time.increaseTo(unlockTime);
 
         await expect(lock.withdraw()).not.to.be.reverted;
-      });
+      }); */
     });
-
+  /*
     describe("Events", function () {
       it("Should emit an event on withdrawals", async function () {
         const { lock, unlockTime, lockedAmount } = await loadFixture(

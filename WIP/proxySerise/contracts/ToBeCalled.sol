@@ -18,7 +18,7 @@ contract ToBeCalled is Ownable {
       console.log("inside updateState - Function called by ", msg.sender);
       console.log("inside updateState - Tx Originated by ", tx.origin);
       console.log("inside updateState - Values passed ", _s, _n);
-      counter += _n;
+      counter = _n;
       greeting = _s;
   }
 }   

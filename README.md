@@ -29,12 +29,36 @@ solidity concepts demo
     - low level call transaction call
 
  - Delgate call and Upgradbility 
-    - Delegate call
-    - Proxy pattern
-    - openzepplin Upgradable
-    - Diamond Pattern : WIP
+  - Call                             - Done
+      - Contract
+      - Deployment script
+      - test cases 
+  - Delegate Call                    - Done
+      - Contract
+      - Deployment script
+      - test cases
+
+  - MultiCall
+  - Multi Delegatecall 
+  - Proxy pattern
+  - Minimal Proxy
+
+  - UUPS
+  - Transparant Proxy 
+  - Beacon Proxy
+  - Daimond Proxy 
+  - openzepplin Upgradable
+
+- EVM In Details
+  - Markle Tree 
+  - Markle Pretcia tree
+  - Decode contract data from storage
+  
+ - ERC165 
 
  - Smart Contract security 
     - Underflow and Over flow 
-    - Reentracy : WIP   
+    - Reentracy : WIP  
+
+ - Account Abstraction     
 
