@@ -1,20 +1,16 @@
-const {ethers} = require("hardhat");
+const { ethers, upgrades } = require("hardhat");
+
 
 async function main() {
 
   const Box = await ethers.getContractFactory("Box");
-  const box = await upgrades.deployProxy(Box, [100], {
-    initilizer : "store"
-  });
-  await box.deployed();
+  const box = await upgrades.deployProxy(Box, [100], { initializer : "store" });
+  await box.deployed();  
 
-  console.log(`Contract Box V1 isdeployed to ${box.address}`);
-
-
-  console.log("Contract ToBeCalled State before call");
+  console.log(`Contract Box V1 is deployed to ${box.address}`);
 
   let instance = await Box.attach(box.address);
-  let value = (await instance.retrive()).toString();
+  let value = (await instance.retrieve()).toString();
   console.log("State Variable value - ", value);
 }
 
