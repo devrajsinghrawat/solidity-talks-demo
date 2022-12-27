@@ -1,0 +1,74 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x52b337c7fEFb488Ff1178bc1CafC34ab18ab7221",
+    "txHash": "0xfb996219ad6167c06598589dccc118f8243539f2b348c776c3a0a83acbeb5559"
+  },
+  "proxies": [
+    {
+      "address": "0x7A7185DDe6Cf3738D4144655e9ed3562653e6c03",
+      "txHash": "0x1ec18eed465d71f6d2a5a0b20e56d332f23baf3e082006ac1dbf9c7162fb6575",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "cba9f8cf52e3c449631a04ea218a6cedcaf7c366669cfc257c89a008266c768f": {
+      "address": "0x7Bd784c5967BA38433fBd3C443AF2821182f799b",
+      "txHash": "0x21b56c413e221e9134ec2698257bd2b9c5c6f4f931c38df240f809cc2f6295bf",
+      "layout": {
+        "solcVersion": "0.8.17",
+        "storage": [
+          {
+            "label": "_value",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256",
+            "contract": "Box",
+            "src": "contracts/Box.sol:10"
+          }
+        ],
+        "types": {
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "1b9f29888b20925cc400f2f36e5896f92cfc2931b9211bb522d82b7bc09352e7": {
+      "address": "0x2351e50db794a7D3f7a86e6cfe9736a8A1FbE74B",
+      "txHash": "0xeed4c3707d4edd80c6313c96ec9a74e994d91050d6d7e4e70587ebae9c7a46e2",
+      "layout": {
+        "solcVersion": "0.8.17",
+        "storage": [
+          {
+            "label": "_value",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256",
+            "contract": "BoxV2",
+            "src": "contracts/BoxV2.sol:10"
+          },
+          {
+            "label": "owner",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "BoxV2",
+            "src": "contracts/BoxV2.sol:11"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    }
+  }
+}
