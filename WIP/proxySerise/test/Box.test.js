@@ -7,7 +7,7 @@ const { expect } = require("chai");
 
 const { ethers, upgrades } = require("hardhat");
 
-let boxV1Address;
+let boxProxyAddress;
 describe("Testing Call function of solidity", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
@@ -17,12 +17,12 @@ describe("Testing Call function of solidity", function () {
     const [owner, otherAccount] = await ethers.getSigners();
 
     const Box = await ethers.getContractFactory("Box");
-    const box = await upgrades.deployProxy(Box, [100], { initializer : "store" });
-    await box.deployed();  
-    boxV1Address = box.address;
-    console.log(`Contract Box V1 is deployed to ${box.address}`);
+    const boxProxy = await upgrades.deployProxy(Box, [100], { initializer : "store" });
+    await boxProxy.deployed();  
+    boxProxyAddress = boxProxy.address;
+    console.log(`Contract boxProxy V1 is deployed to ${boxProxy.address}`);
 
-    return { box, owner, otherAccount };
+    return { boxProxy, owner, otherAccount };
   }
 
   async function deployV2ContractsFixture() {
@@ -30,18 +30,18 @@ describe("Testing Call function of solidity", function () {
     const [owner, otherAccount] = await ethers.getSigners();
 
     const BoxV2 = await ethers.getContractFactory("BoxV2");
-    const boxv2 = await upgrades.upgradeProxy(boxV1Address, BoxV2);
+    const boxv2 = await upgrades.upgradeProxy(boxProxyAddress, BoxV2);
     await boxv2.deployed();  
-    console.log(`Contract Box V2 is updated to ${boxv2.address}`);
+    console.log(`Contract boxProxy V2 is updated to ${boxv2.address}`);
 
     return { boxv2, owner, otherAccount };
   }
 
   describe("Deployment", function () {
     it("Should set the initial state for Variables", async function () {
-      const { box } = await loadFixture(deployContractsFixture);
+      const { boxProxy } = await loadFixture(deployContractsFixture);
 
-      expect(await box.retrieve()).to.equal(100);
+      expect(await boxProxy.retrieve()).to.equal(100);
     });
 
     it("Should increament the variable aftr update", async function () {
