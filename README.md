@@ -42,7 +42,8 @@ solidity concepts demo
   - Multi Delegatecall 
   - Proxy pattern
   - Minimal Proxy
-
+  - Create2
+  
   - UUPS
   - Transparant Proxy 
   - Beacon Proxy
