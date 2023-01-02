@@ -6,8 +6,6 @@ import "hardhat/console.sol";
 import "./StorageSlot.sol";
 
 contract Proxy {
-    // address public implementation;
-    // address public admin;
     bytes32 public constant ADMIN_SLOT = bytes32(
         uint(keccak256("eip1967.proxy.admin")) - 1
     );
@@ -18,6 +16,15 @@ contract Proxy {
 
     constructor() {
         _setAdmin(msg.sender);
+    }
+
+    modifier ifAdmin() {
+        if (msg.sender == _getAdmin()) {
+            _;
+        } else {
+            console.log("Proxy: Calling fallback from modifier");
+            _fallback();
+        }
     }
 
     function _delegate(address _implementation) internal virtual {
@@ -45,16 +52,21 @@ contract Proxy {
         }
     }        
 
+    function _fallback() private {
+        console.log("Proxy: Calling fallback in contract");
+        _delegate(_getImplementation());
+    }
+
     fallback() external payable {
-        _delegate(getImplementationAddress());
+        _fallback();
     }
 
     receive() external payable {
-        _delegate(getImplementationAddress());
+        _fallback();
     }
 
-    function upgradeTo(address _impl) external {
-        require(msg.sender == getAdminAddress(), "not a owner");
+    function upgradeTo(address _impl) external ifAdmin {
+        require(_impl.code.length > 0, "not a contract");
         _setImplementation(_impl);
     }
 
@@ -66,16 +78,24 @@ contract Proxy {
         StorageSlot.getAddressSlot(IMPLEMENTATION_SLOT).value = _implementation;
     }
 
-    function getImplementationAddress() public view returns (address) {
+    function _getImplementation() private view returns (address) {
         return StorageSlot.getAddressSlot(IMPLEMENTATION_SLOT).value;
     }
 
-    function getAdminAddress() public view returns (address) {
+    function _getAdmin() private view returns (address) {
         return StorageSlot.getAddressSlot(ADMIN_SLOT).value;
     }
 
-    function helper(string memory _func) external pure returns(bytes4 selector) {
-        selector = bytes4(abi.encodeWithSignature(_func));
-        return selector;
+    function admin() external ifAdmin returns(address) {
+        return _getAdmin();
     }
+
+    function implementation() external ifAdmin returns(address) {
+        return _getImplementation();
+    }
+
+    function getContractAddress() external ifAdmin returns (address) {
+        console.log("Proxy: Calling getContractAddress");
+        return address(this);
+    }   
 }

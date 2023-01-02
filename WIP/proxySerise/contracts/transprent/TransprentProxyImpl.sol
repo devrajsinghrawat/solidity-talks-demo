@@ -7,11 +7,17 @@ import "hardhat/console.sol";
 contract TransprentProxyImpl {
     uint public counter;
 
-    constructor(uint _c) {
-        counter = _c;
+    constructor() {
+        counter = 1;
     }
-
+    
     function inc() public {
         counter += 1;
+        console.log("inc called ", counter);
+    }
+
+    function getContractAddress() external view returns (address) {
+        console.log("Impl.: Calling getContractAddress");
+        return address(1);
     }
 }
